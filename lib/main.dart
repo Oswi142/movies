@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:popular_movies/movies_provider.dart';
 
 void main() {
   runApp(const Movies());
@@ -14,6 +15,7 @@ class Movies extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
+      home: MoviesProvider(),
     );
   }
 }
