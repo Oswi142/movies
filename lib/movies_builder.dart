@@ -16,10 +16,16 @@ class _MoviesBuilderState extends State<PopularMoviesScreen> {
       setState(() {
         selectedMovies.remove(movie);
       });
-    } else {
+    } else if (selectedMovies.length < 3) {
       setState(() {
         selectedMovies.add(movie);
       });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Solo puedes seleccionar hasta 3 películas.'),
+        ),
+      );
     }
   }
 
@@ -53,7 +59,7 @@ class _MoviesBuilderState extends State<PopularMoviesScreen> {
                       fit: BoxFit.cover,
                     ),
                     trailing: selectedMovies.contains(movie)
-                        ? Icon(Icons.check_circle, color: Colors.green)
+                        ? Icon(Icons.check_circle, color: Color.fromARGB(255, 72, 71, 141))
                         : Icon(Icons.circle_outlined),
                   ),
                 );
@@ -97,7 +103,11 @@ class _MoviesBuilderState extends State<PopularMoviesScreen> {
                   final movie = selectedMovies[index];
                   return ListTile(
                     title: Text(movie['title']),
-                    subtitle: Text(movie['overview']),
+                    subtitle: Text(
+                      movie['overview'],
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   );
                 },
               ),
