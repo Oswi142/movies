@@ -70,7 +70,7 @@ class _MoviesBuilderState extends State<PopularMoviesScreen> {
             _showSelectedMovies(context);
           }
         },
-        child: Icon(Icons.add),
+        child: Icon(Icons.shopping_cart),
       ),
     );
   }
@@ -82,7 +82,7 @@ class _MoviesBuilderState extends State<PopularMoviesScreen> {
         return Container(
           padding: EdgeInsets.all(16.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
@@ -104,7 +104,6 @@ class _MoviesBuilderState extends State<PopularMoviesScreen> {
               SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
-                  // Acción al presionar el botón de comprar
                 },
                 child: Text('Comprar'),
               ),
