@@ -3,7 +3,26 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popular_movies/movies_cubit.dart';
 import 'package:popular_movies/movies_state.dart';
 
-class PopularMoviesScreen extends StatelessWidget {
+class PopularMoviesScreen extends StatefulWidget {
+  @override
+  _MoviesBuilderState createState() => _MoviesBuilderState();
+}
+
+class _MoviesBuilderState extends State<PopularMoviesScreen> {
+  List<dynamic> selectedMovies = [];
+
+  void toggleMovieSelection(dynamic movie) {
+    if (selectedMovies.contains(movie)) {
+      setState(() {
+        selectedMovies.remove(movie);
+      });
+    } else {
+      setState(() {
+        selectedMovies.add(movie);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final moviesCubit = BlocProvider.of<MoviesCubit>(context);
@@ -23,7 +42,7 @@ class PopularMoviesScreen extends StatelessWidget {
                 final movie = state.movies[index];
                 return GestureDetector(
                   onTap: () {
-                    _showMovieDetails(context, movie);
+                    toggleMovieSelection(movie);
                   },
                   child: ListTile(
                     title: Text(movie['title']),
@@ -33,6 +52,9 @@ class PopularMoviesScreen extends StatelessWidget {
                       width: 100,
                       fit: BoxFit.cover,
                     ),
+                    trailing: selectedMovies.contains(movie)
+                        ? Icon(Icons.check_circle, color: Colors.green)
+                        : Icon(Icons.circle_outlined),
                   ),
                 );
               },
@@ -42,10 +64,18 @@ class PopularMoviesScreen extends StatelessWidget {
           }
         },
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          if (selectedMovies.isNotEmpty) {
+            _showSelectedMovies(context);
+          }
+        },
+        child: Icon(Icons.add),
+      ),
     );
   }
 
-  void _showMovieDetails(BuildContext context, dynamic movie) {
+  void _showSelectedMovies(BuildContext context) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -56,29 +86,27 @@ class PopularMoviesScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                movie['title'],
+                'Películas seleccionadas',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 8),
-              Text(
-                movie['overview'],
-                style: TextStyle(fontSize: 16),
+              ListView.builder(
+                shrinkWrap: true,
+                itemCount: selectedMovies.length,
+                itemBuilder: (context, index) {
+                  final movie = selectedMovies[index];
+                  return ListTile(
+                    title: Text(movie['title']),
+                    subtitle: Text(movie['overview']),
+                  );
+                },
               ),
               SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '\$20', // Precio fijo de $20
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Acción al presionar el botón de comprar
-                    },
-                    child: Text('Comprar'),
-                  ),
-                ],
+              ElevatedButton(
+                onPressed: () {
+                  // Acción al presionar el botón de comprar
+                },
+                child: Text('Comprar'),
               ),
             ],
           ),
