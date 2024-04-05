@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'movies_cubit.dart';
-import 'movies_state.dart';
+import 'package:popular_movies/movies_cubit.dart';
+import 'package:popular_movies/movies_state.dart';
 
 class PopularMoviesScreen extends StatelessWidget {
   @override
@@ -23,7 +23,7 @@ class PopularMoviesScreen extends StatelessWidget {
                 final movie = state.movies[index];
                 return GestureDetector(
                   onTap: () {
-                    _showMovieDetails(context, movie['title']);
+                    _showMovieDetails(context, movie);
                   },
                   child: ListTile(
                     title: Text(movie['title']),
@@ -45,17 +45,42 @@ class PopularMoviesScreen extends StatelessWidget {
     );
   }
 
-  void _showMovieDetails(BuildContext context, String title) {
+  void _showMovieDetails(BuildContext context, dynamic movie) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
         return Container(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              title,
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                movie['title'],
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 8),
+              Text(
+                movie['overview'],
+                style: TextStyle(fontSize: 16),
+              ),
+              SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '\$20', // Precio fijo de $20
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Acción al presionar el botón de comprar
+                    },
+                    child: Text('Comprar'),
+                  ),
+                ],
+              ),
+            ],
           ),
         );
       },
