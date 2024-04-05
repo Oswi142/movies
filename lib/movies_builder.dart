@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:popular_movies/movies_cubit.dart';
 import 'package:popular_movies/movies_state.dart';
+import 'selected_movies.dart';
 
 class PopularMoviesScreen extends StatefulWidget {
   @override
@@ -59,7 +60,7 @@ class _MoviesBuilderState extends State<PopularMoviesScreen> {
                       fit: BoxFit.cover,
                     ),
                     trailing: selectedMovies.contains(movie)
-                        ? Icon(Icons.check_circle, color: Color.fromARGB(255, 72, 71, 141))
+                        ? Icon(Icons.check_circle, color: Color.fromARGB(255, 61, 134, 194))
                         : Icon(Icons.circle_outlined),
                   ),
                 );
@@ -103,17 +104,14 @@ class _MoviesBuilderState extends State<PopularMoviesScreen> {
                   final movie = selectedMovies[index];
                   return ListTile(
                     title: Text(movie['title']),
-                    subtitle: Text(
-                      movie['overview'],
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    subtitle: Text(movie['overview']),
                   );
                 },
               ),
               SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
+                  _navigateToSelectedMoviesPage(context);
                 },
                 child: Text('Comprar'),
               ),
@@ -121,6 +119,15 @@ class _MoviesBuilderState extends State<PopularMoviesScreen> {
           ),
         );
       },
+    );
+  }
+
+  void _navigateToSelectedMoviesPage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SelectedMoviesPage(selectedMovies: selectedMovies),
+      ),
     );
   }
 }
