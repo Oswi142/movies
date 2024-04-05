@@ -14,9 +14,9 @@ class PopularMoviesScreen extends StatelessWidget {
       ),
       body: BlocBuilder<MoviesCubit, MoviesState>(
         builder: (context, state) {
-          if (state.movies.isEmpty) {
+          if (state is MoviesLoading) {
             return Center(child: CircularProgressIndicator());
-          } else {
+          } else if (state is MoviesLoaded) {
             return ListView.builder(
               itemCount: state.movies.length,
               itemBuilder: (context, index) {
@@ -32,6 +32,8 @@ class PopularMoviesScreen extends StatelessWidget {
                 );
               },
             );
+          } else {
+            return Center(child: Text('Ha ocurrido un error'));
           }
         },
       ),

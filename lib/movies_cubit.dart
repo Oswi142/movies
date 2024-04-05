@@ -5,15 +5,16 @@ import 'movies_state.dart';
 class MoviesCubit extends Cubit<MoviesState> {
   final Dio dio = Dio();
 
-  MoviesCubit() : super(MoviesState([]));
+  MoviesCubit() : super(MoviesLoading());
 
   void getMovies() async {
+    emit(MoviesLoading());
     try {
       final response = await dio.get(
           'https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=fa3e844ce31744388e07fa47c7c5d8c3');
-      emit(MoviesState(response.data['results']));
+      emit(MoviesLoaded(movies: response.data['results']));
     } catch (e) {
-      print('Error fetching popular movies: $e');
+      emit(MoviesError(error: 'Error al cargar'));
     }
   }
 }
