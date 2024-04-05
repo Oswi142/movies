@@ -21,13 +21,18 @@ class PopularMoviesScreen extends StatelessWidget {
               itemCount: state.movies.length,
               itemBuilder: (context, index) {
                 final movie = state.movies[index];
-                return ListTile(
-                  title: Text(movie['title']),
-                  subtitle: Text(movie['overview']),
-                  leading: Image.network(
-                    'https://image.tmdb.org/t/p/w500${movie['poster_path']}',
-                    width: 100,
-                    fit: BoxFit.cover,
+                return GestureDetector(
+                  onTap: () {
+                    _showMovieDetails(context, movie);
+                  },
+                  child: ListTile(
+                    title: Text(movie['title']),
+                    subtitle: Text(movie['overview']),
+                    leading: Image.network(
+                      'https://image.tmdb.org/t/p/w500${movie['poster_path']}',
+                      width: 100,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 );
               },
@@ -37,6 +42,33 @@ class PopularMoviesScreen extends StatelessWidget {
           }
         },
       ),
+    );
+  }
+
+  // Método para mostrar el Bottom Sheet:
+  void _showMovieDetails(BuildContext context, dynamic movie) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Container(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.network(
+                'https://image.tmdb.org/t/p/w500${movie['poster_path']}',
+                width: 200,
+                fit: BoxFit.cover,
+              ),
+              SizedBox(height: 16),
+              Text(
+                movie['title'],
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
