@@ -23,7 +23,7 @@ class PopularMoviesScreen extends StatelessWidget {
                 final movie = state.movies[index];
                 return GestureDetector(
                   onTap: () {
-                    _showMovieDetails(context, movie);
+                    _showMovieDetails(context, movie['title']);
                   },
                   child: ListTile(
                     title: Text(movie['title']),
@@ -45,27 +45,17 @@ class PopularMoviesScreen extends StatelessWidget {
     );
   }
 
-  // Método para mostrar el Bottom Sheet:
-  void _showMovieDetails(BuildContext context, dynamic movie) {
+  void _showMovieDetails(BuildContext context, String title) {
     showModalBottomSheet(
       context: context,
-      builder: (context) {
+      builder: (BuildContext context) {
         return Container(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Image.network(
-                'https://image.tmdb.org/t/p/w500${movie['poster_path']}',
-                width: 200,
-                fit: BoxFit.cover,
-              ),
-              SizedBox(height: 16),
-              Text(
-                movie['title'],
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              title,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
           ),
         );
       },
