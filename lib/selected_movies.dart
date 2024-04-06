@@ -11,6 +11,7 @@ class SelectedMoviesPage extends StatefulWidget {
 
 class _SelectedMoviesPageState extends State<SelectedMoviesPage> {
   List<int> quantities = [];
+  int unitPrice = 20;
 
   @override
   void initState() {
@@ -20,6 +21,14 @@ class _SelectedMoviesPageState extends State<SelectedMoviesPage> {
 
   @override
   Widget build(BuildContext context) {
+    int totalPrice = 0;
+
+    for (int i = 0; i < widget.selectedMovies.length; i++) {
+      final quantity = quantities[i];
+      final total = quantity * unitPrice;
+      totalPrice += total;
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Peliculas Seleccionadas'),
@@ -32,7 +41,13 @@ class _SelectedMoviesPageState extends State<SelectedMoviesPage> {
 
           return ListTile(
             title: Text(movie['title']),
-            subtitle: Text(movie['overview']),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Precio unitario: \$${unitPrice.toString()}'),
+                Text('Cantidad: $quantity'),
+              ],
+            ),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -60,23 +75,33 @@ class _SelectedMoviesPageState extends State<SelectedMoviesPage> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Acción al presionar el botón de comprar
-          _showConfirmationDialog();
-        },
-        child: Icon(Icons.check),
+      bottomNavigationBar: BottomAppBar(
+        child: Container(
+          padding: EdgeInsets.all(16.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Total: \$${totalPrice.toString()}'),
+              ElevatedButton(
+                onPressed: () {
+                  _showConfirmationDialog(totalPrice);
+                },
+                child: Text('Comprar'),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
 
-  void _showConfirmationDialog() {
+  void _showConfirmationDialog(int totalPrice) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Confirmar Compra'),
-          content: Text('¿Estás seguro de comprar estas películas?'),
+          content: Text('El total a pagar es de \$${totalPrice.toString()}. ¿Estás seguro de comprar estas películas?'),
           actions: [
             TextButton(
               onPressed: () {
@@ -86,8 +111,7 @@ class _SelectedMoviesPageState extends State<SelectedMoviesPage> {
             ),
             TextButton(
               onPressed: () {
-                // Realizar la acción de compra
-                Navigator.pop(context); // Cerrar el diálogo
+                Navigator.pop(context);
                 _showPurchaseSuccessSnackbar();
               },
               child: Text('Confirmar'),

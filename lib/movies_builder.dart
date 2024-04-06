@@ -9,7 +9,8 @@ class PopularMoviesScreen extends StatefulWidget {
   _MoviesBuilderState createState() => _MoviesBuilderState();
 }
 
-class _MoviesBuilderState extends State<PopularMoviesScreen> {
+class _MoviesBuilderState extends State<PopularMoviesScreen
+> {
   List<dynamic> selectedMovies = [];
 
   void toggleMovieSelection(dynamic movie) {
@@ -60,7 +61,7 @@ class _MoviesBuilderState extends State<PopularMoviesScreen> {
                       fit: BoxFit.cover,
                     ),
                     trailing: selectedMovies.contains(movie)
-                        ? Icon(Icons.check_circle, color: Color.fromARGB(255, 61, 134, 194))
+                        ? Icon(Icons.check_circle, color: Colors.green)
                         : Icon(Icons.circle_outlined),
                   ),
                 );
@@ -104,7 +105,11 @@ class _MoviesBuilderState extends State<PopularMoviesScreen> {
                   final movie = selectedMovies[index];
                   return ListTile(
                     title: Text(movie['title']),
-                    subtitle: Text(movie['overview']),
+                    subtitle: Text(
+                      movie['overview'].length > 100
+                          ? movie['overview'].substring(0, 100) + '...'
+                          : movie['overview'],
+                    ),
                   );
                 },
               ),
