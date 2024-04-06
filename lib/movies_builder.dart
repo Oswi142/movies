@@ -61,7 +61,7 @@ class _MoviesBuilderState extends State<PopularMoviesScreen
                       fit: BoxFit.cover,
                     ),
                     trailing: selectedMovies.contains(movie)
-                        ? Icon(Icons.check_circle, color: Colors.green)
+                        ? Icon(Icons.check_circle, color: Color.fromARGB(255, 140, 99, 148))
                         : Icon(Icons.circle_outlined),
                   ),
                 );
